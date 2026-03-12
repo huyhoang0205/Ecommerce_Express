@@ -25,27 +25,19 @@ const {findByEmail} = require('./shop.service')
 
 class AccessesService {
 
-    static  handleRefreshToken = async (refreshToken) => {
-        const foundToken = await keyTokenService.findByRefreshTokensUsed(refreshToken);
-        if(foundToken) {
-            //decoded refreshToken if it exist in DB
-            const {userId , email} = await verifyJWT(refreshToken , foundToken.privateKey);
-            console.log("Decoded:: ", {userId , email});
+    static  handleRefreshToken = async ({refreshToken , user ,keyStore}) => {
 
-            //delete 
+        const {userId , email} = user;
+
+        if(keyStore.refreshTokensUsed.includes(refreshToken)) {
             await keyTokenService.deleteKeyById({userId})
-
             throw new ForbiddenError("Refresh token reuse detected! Pls re-login!")
         }
 
-        const holderToken = await keyTokenService.findByRefreshToken(refreshToken);
-        if(!holderToken) {
+        if(keyStore.refreshToken !== refreshToken) {
             throw new AuthFailureError("Shop not found with this refresh token!")
         }
 
-        //verify token
-        const {userId , email} = await verifyJWT(refreshToken , holderToken.privateKey);
-        //check UserId
         const foundShop = await findByEmail(email);
 
         console.log('[2]:::' , {userId , email})
@@ -55,10 +47,10 @@ class AccessesService {
         }
 
         //create new accessToken and refreshToken
-        const tokens = await createKeyPair({userId , email}, holderToken.publicKey , holderToken.privateKey)
+        const tokens = await createKeyPair({userId , email}, keyStore.publicKey , keyStore.privateKey)
 
         //update accessToken and refreshToken in DB
-        await holderToken.updateOne({
+        await keyStore.updateOne({
             $set : {
                 refreshToken: tokens.refreshToken,
             },
@@ -68,9 +60,9 @@ class AccessesService {
         })
 
         return {
-            user: {userId , email},
+            user,
             tokens,
-        }
+        } 
     }
 
     static logout = async (keyStore) => {
