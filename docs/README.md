@@ -4,7 +4,7 @@
 - Login and Authentication
 - Handle RefreshToken
 
-**Product service**
+**Product Service**
 - Query Products [public]
 - Query Products Using It's Id [Public]
 - Create New Product [Shop]
@@ -12,6 +12,9 @@
 - Unpulish/Publish Product [Shop]
 - Search Product [Public]
 - Darf product [Shop]
+
+**Inventory Service**
+- Add Inventory When Create Product [Shop]
 
 **Other**
 - Handle Error / Handle Response
