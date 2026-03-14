@@ -119,6 +119,7 @@ const authenticationV2 = asyncHandler( async (req , res , next) => {
         }
 
         req.keyStore = keyStore; // save keyStore to req for use in logout and other function in services
+        req.user = decodeUser
 
         return next();
     } catch (error) {
