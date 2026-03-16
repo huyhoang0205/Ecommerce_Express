@@ -19,7 +19,14 @@
 - Get Discount Amount [User]
 - Delete Discount Code [Admin|Shop]
 - Cancel Discount Code [User] 
-- Move Code apiKey.service and shop.service to apiKey.repo and shop.repo
+
+**Cart Service**
+- Add Product To Cart [User]
+- Reduce Product Quantity [User]
+- Increase Product Quantity [User]
+- Get List To Cart [User]
+- Delete Cart [User]
+- Delete Cart Item [User]
 
 **Inventory Service**
 - Add Inventory When Create Product [Shop]

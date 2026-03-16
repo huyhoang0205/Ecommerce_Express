@@ -163,6 +163,7 @@ Dùng trong updateOne(), updateMany(), findByIdAndUpdate().
 |$mul|Nhân giá trị số|{ $mul: { price: 1.1 } } (Tăng 10% giá trị)|
 |$rename|Đổi tên trường|{ $rename: { 'oldName': 'newName' } }|
 |$min / $max|Cập nhật nếu giá trị mới nhỏ/lớn hơn|{ $max: { highScore: 120 } }|
+|upsert| Nếu tìm thấy thì cập nhật, nếu không tìm thấy thì tạo mới| {upsert: true}|
 
 ### 📚 Mảng (Arrays)
 

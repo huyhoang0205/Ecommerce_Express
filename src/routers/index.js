@@ -11,6 +11,8 @@ const {apiKey , permissions} = require('../auths/check.auth');
 
 //discount
 router.use('/v1/api/discounts' , require('./discounts'))
+//cart
+router.use('/v1/api/carts' , require('./carts'))
 //products
 router.use('/v1/api/products' , require('./products'))
 //accesses
