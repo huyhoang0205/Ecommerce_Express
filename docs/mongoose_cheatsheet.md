@@ -159,7 +159,7 @@ Dùng trong updateOne(), updateMany(), findByIdAndUpdate().
 |--------|-------|-----|
 |$set|Ghi đè/Tạo mới giá trị|{ $set: { status: 'active' } }|
 |$unset|Xóa bỏ một trường|"{ $unset: { temporaryData: """" } }"|
-|$inc|Tăng/Giảm giá trị số|"{ $inc: { views: 1| points: -5 } }"|
+|$inc|Tăng/Giảm giá trị số|"{ $inc: { views: 1\| points: -5 } }"|
 |$mul|Nhân giá trị số|{ $mul: { price: 1.1 } } (Tăng 10% giá trị)|
 |$rename|Đổi tên trường|{ $rename: { 'oldName': 'newName' } }|
 |$min / $max|Cập nhật nếu giá trị mới nhỏ/lớn hơn|{ $max: { highScore: 120 } }|

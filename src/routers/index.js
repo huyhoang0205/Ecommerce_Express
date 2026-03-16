@@ -9,8 +9,10 @@ const {apiKey , permissions} = require('../auths/check.auth');
 //check permissions
 // router.use(permissions('0000'))
 
+//discount
+router.use('/v1/api/discounts' , require('./discounts'))
 //products
-router.use('/v1/api/products' , require('./products')) // loi logic neu /v1/api/:id router dong ton tai
+router.use('/v1/api/products' , require('./products'))
 //accesses
 router.use('/v1/api', require('./accesses'))
 
