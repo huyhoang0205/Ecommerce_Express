@@ -20,7 +20,8 @@ const { BadRequestError,
 
 const { removeUndefinedObject,
         updateNestedObjectParser,
- } = require('../utils')
+ } = require('../utils');
+const { pushNotiToSystem } = require('./notification.service');
 
 //Factory class 
 class ProductFactory {
@@ -113,6 +114,17 @@ class Product {
                 shopId: this.product_shop,
                 stock: this.product_quantity,
             })
+
+            pushNotiToSystem({
+                type: 'SHOP_001',
+                receiver_id: 1,
+                sender_id: this.product_shop,
+                option: {
+                    product_name: this.product_name,
+                    shop_name: this.product_shop
+                }
+            }).then(rs => console.log(rs))
+            .catch(console.error)
         }
         return newProduct;
     }

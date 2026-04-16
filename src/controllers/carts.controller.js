@@ -9,7 +9,10 @@ class CartController {
         console.log("req body:::",req.body)
         new SuccessResponse({
             message: 'Add To Cart Successfully!',
-            metadata: await CartService.addToCart(req.body)
+            metadata: await CartService.addToCart({
+                ...req.body,
+                user_id: req.user.userId
+            })
         }).send(res)
     }
 
@@ -17,21 +20,29 @@ class CartController {
     updateCart = async (req, res, next) => {
         new SuccessResponse({
             message: 'Update Cart Successfully!',
-            metadata: await CartService.addToCartV2({...req.body})
+            metadata: await CartService.addToCartV2({
+                ...req.body,
+                user_id: req.user.userId
+            })
         }).send(res)
     }
 
     deleteItemInCart = async (req, res, next) => {
         new SuccessResponse({
             message: 'Delete Cart Successfully!',
-            metadata: await CartService.deleteItemInUserCart({...req.body})
+            metadata: await CartService.deleteItemInUserCart({
+                ...req.body,
+                user_id: req.user.userId
+            })
         }).send(res)
     }
 
     listCart = async (req, res, next) => {
         new SuccessResponse({
             message: 'List Cart Successfully!',
-            metadata: await CartService.getListUserCart({...req.query})
+            metadata: await CartService.getListUserCart({
+                user_id: req.user.userId
+            })
         }).send(res)
     }
 }

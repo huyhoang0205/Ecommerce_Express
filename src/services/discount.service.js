@@ -21,6 +21,7 @@ const {
 
 const {
     findAllProducts,
+    checkProductByServer
 } = require('../models/repositories/product.repo')
 
 class DiscountService {
@@ -29,7 +30,7 @@ class DiscountService {
     static async createDiscountCode(payload){
         const {
             code, start_date, end_date,
-            is_active, shop_id, min_order_value, product_ids, apply_to,max_uses,use_count,
+            is_active, shop_id, min_order_value, product_ids, apply_to,max_uses,
             name, description, type, value, max_value, uses_count, max_use_per_user 
         } = payload;
         if(new Date() < new Date(start_date) || new Date() > new Date(end_date)){
@@ -46,7 +47,7 @@ class DiscountService {
         }
 
         const newDiscount = await createNewDiscount({
-            name,description,type,value,code,start_date,end_date,max_uses,use_count,max_value,max_use_per_user,min_order_value,shop_id,is_active,apply_to,product_ids,uses_count
+            name,description,type,value,code,start_date,end_date,max_uses,max_value,max_use_per_user,min_order_value,shop_id,is_active,apply_to,product_ids,uses_count
         })
 
         return newDiscount;
@@ -148,7 +149,9 @@ class DiscountService {
         }
         let totalOrder = 0;
         if(discount_min_order_value > 0) {
-            totalOrder = products.reduce((acc, product) => {
+            const check_product_in_server = await checkProductByServer(products);
+            // console.log("check_product_in_server:: --- getAmount" , check_product_in_server)
+            totalOrder = check_product_in_server.reduce((acc, product) => {
                 return acc + (product.product_quantity * product.product_price)
             },0)
             console.log('totalORder::',totalOrder)

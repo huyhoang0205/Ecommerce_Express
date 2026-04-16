@@ -7,6 +7,10 @@ const {
     getUnSelectData
 } = require('../../utils')
 
+const {
+    convertToObjectIdMongoDb
+} = require('../../utils')
+
 //query
 const findAllDraftsForShop = async ({query , limit , skip}) => {
     return await queryProducts({query , limit , skip})
@@ -43,9 +47,22 @@ const findAllProducts = async ({limit , sort , page , filter , select }) => {
 }
 
 const findOneProduct = async ({product_id, unselect = []}) => {
-    return await product.findById(product_id).select(getUnSelectData(unselect))
+    return await product.findById(convertToObjectIdMongoDb(product_id)).select(getUnSelectData(unselect))
 }
 
+
+const checkProductByServer = async(products) => {
+    return await Promise.all(products.map(async product => {
+        const found_product = await findOneProduct({product_id:product.product_id})
+        if(found_product) {
+            return {
+                product_price: found_product.product_price,
+                product_quantity: product.product_quantity,
+                product_id: product.product_id
+            }
+        }
+    }))
+}
 
 //update
 
@@ -112,5 +129,6 @@ module.exports = {
     findAllProducts,
     findOneProduct,
     updateProductById,
+    checkProductByServer
 }
 

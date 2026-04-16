@@ -11,7 +11,7 @@ const {
     findByUserId,
     createCart,
     updateQuantityofCart,
-    deleteCart,
+    deleteItemInCart,
 } = require('../models/repositories/cart.repo')
 
 const {
@@ -21,8 +21,7 @@ const {
 class CartService {
 
     static async addToCart({user_id , product = {}}) {
-        const cast_user_id = Number(user_id);
-        const user_cart = await findByUserId({user_id: cast_user_id})
+        const user_cart = await findByUserId({cast_user_id: user_id })
 
         if(!user_cart) {
             return await createCart({user_id, product});
@@ -62,7 +61,7 @@ class CartService {
 
 
     static async deleteItemInUserCart({user_id, product_id}) {
-        const delete_cart = await deleteCart({user_id, product_id});
+        const delete_cart = await deleteItemInCart({user_id, product_id});
         return delete_cart;
     }
 

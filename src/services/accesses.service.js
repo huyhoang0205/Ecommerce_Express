@@ -5,7 +5,6 @@ const bcrypt = require('bcrypt')
 const crypto = require('crypto')
 const keyTokenService = require('./keyToken.service')
 const { createKeyPair,
-        verifyJWT,
  } = require('../auths/auth.Util')
 const { getInfoData } = require('../utils')
 const { BadRequestError , 
@@ -13,15 +12,11 @@ const { BadRequestError ,
         ForbiddenError,
 } = require('../cores/error.response')
 
-const ROLE_SHOP = {
-    SHOP: "SHOP",
-    WRITER: "WRITER",
-    EDITOR: "EDITOR",
-    ADMIN: "ADMIN"
-}
-
+const {getRoleIdByName} = require('../models/repositories/role.repo')
+const ROLE_CONSTANT = require('../constant/role.constant')
 //service
 const {findByEmail} = require('./shop.service')
+const {Types} = require('mongoose')
 
 class AccessesService {
 
@@ -47,7 +42,7 @@ class AccessesService {
         }
 
         //create new accessToken and refreshToken
-        const tokens = await createKeyPair({userId , email}, keyStore.publicKey , keyStore.privateKey)
+        const tokens = await createKeyPair({userId , email, role: ROLE_CONSTANT.SHOP}, keyStore.publicKey , keyStore.privateKey)
 
         //update accessToken and refreshToken in DB
         await keyStore.updateOne({
@@ -86,7 +81,7 @@ class AccessesService {
         const publicKey = crypto.randomBytes(64).toString('hex');
         const privateKey = crypto.randomBytes(64).toString('hex');
 
-        const tokens = await createKeyPair({userId: foundShop._id , email } , publicKey , privateKey)
+        const tokens = await createKeyPair({userId: foundShop._id , email ,role: ROLE_CONSTANT.SHOP } , publicKey , privateKey)
 
         await keyTokenService.createKeyToken({
             refreshToken: tokens.refreshToken,
@@ -110,9 +105,9 @@ class AccessesService {
             }
 
             const passwordHash = await bcrypt.hash(password,10);
-
+            const role = await getRoleIdByName(ROLE_CONSTANT.SHOP)
             const newShop = await shopModel.create({
-                name , email , password: passwordHash , roles: [ROLE_SHOP.SHOP]
+                name , email , password: passwordHash , role
             })
             if(newShop) {
                 //create privateKey and publicKey with RSA
@@ -144,7 +139,7 @@ class AccessesService {
                     }
                 }
                 // JWT
-                const tokens = await createKeyPair({userId: newShop._id , email } , keyStore.publicKey , keyStore.privateKey)
+                const tokens = await createKeyPair({userId: newShop._id , email ,role: ROLE_CONSTANT.SHOP } , keyStore.publicKey , keyStore.privateKey)
                 console.log("Created Token Successfully:: ", tokens);
                 
                 return {
@@ -160,6 +155,29 @@ class AccessesService {
                 metadata : null
             }
         }
+    static admin = async ( {email , password , refreshToken = null}) => {
+        const adminId = new Types.ObjectId("69e09cf33b81ea000dc875b9");
+        if(email !== 'admin@gmail.com') throw new BadRequestError("Have wrong!")
+        if(password !== 'admin123') throw new BadRequestError("Have wrong!")
+        //create token
+        const publicKey = crypto.randomBytes(64).toString('hex');
+        const privateKey = crypto.randomBytes(64).toString('hex');
+
+        const tokens = await createKeyPair({userId: adminId , email ,role: ROLE_CONSTANT.ADMIN } , publicKey , privateKey)
+
+        await keyTokenService.createKeyToken({
+            refreshToken: tokens.refreshToken,
+            publicKey,
+            privateKey,
+            userId: adminId,
+        })
+
+        return {
+                id: adminId,
+                tokens,
+        }
+
+    }
 }
 
 module.exports = AccessesService;

@@ -2,6 +2,9 @@
 
 const {cart} = require('../carts.model');
 
+const {
+    convertToObjectIdMongoDb
+} = require('../../utils')
 
 //CREATE//
 const createCart = async ({user_id, product}) => {
@@ -19,6 +22,12 @@ const createCart = async ({user_id, product}) => {
 const findByUserId = async ({user_id}) => {
     return await cart.findOne({cart_user_id: user_id})
 }
+
+const findByCartId = async({cart_id}) => {
+    return await cart.findOne({_id: convertToObjectIdMongoDb(cart_id),cart_status:'active'}).lean();
+}
+
+
 
 
 //END QUERY//
@@ -40,7 +49,7 @@ const updateQuantityofCart = async({user_id, product}) => {
 
 
 //DELETE
-const deleteCart = async ({user_id, product_id}) => {
+const deleteItemInCart = async ({user_id, product_id}) => {
     const query = {cart_user_id: user_id, cart_state: 'active'},
     update = {
         $pull: {
@@ -52,9 +61,21 @@ const deleteCart = async ({user_id, product_id}) => {
     return await cart.updateOne(query,update);
 }
 
+const deleteCart = async({user_id}) => {
+    const query = {cart_user_id: user_id, cart_state: 'active'},
+    update = {
+        $set: {
+            cart_products: []
+        }
+    }
+    return await cart.updateOne(query,update);
+}
+
 module.exports = {
     findByUserId,
     createCart,
     updateQuantityofCart,
+    deleteItemInCart,
+    findByCartId,
     deleteCart
 }

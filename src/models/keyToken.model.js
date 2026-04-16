@@ -10,7 +10,6 @@ var keyTokenSchema = new Schema({
     user:{
         type: Schema.Types.ObjectId,
         required:true,
-        ref: 'Shop',
     },
     publicKey:{
         type: String,

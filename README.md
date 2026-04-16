@@ -28,6 +28,13 @@
 - Delete Cart [User]
 - Delete Cart Item [User]
 
+**Order Service**
+- Create New Order [User]
+- Query Order [User]
+- Query Order Using It's ID [User]
+- Cancel Order [User]
+- Update Order Status[Admin]
+
 **Inventory Service**
 - Add Inventory When Create Product [Shop]
 

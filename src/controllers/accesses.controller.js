@@ -36,6 +36,13 @@ class AccessesController {
             metadata : await AccessesService.signup(req.body)
         }).send(res)
     }
+
+    admin = async (req , res , next) => {
+        new SuccessResponse({
+            message : "Admin Login Success !",
+            metadata : await AccessesService.admin(req.body)
+        }).send(res)
+    }
 }
 
 module.exports = new AccessesController()

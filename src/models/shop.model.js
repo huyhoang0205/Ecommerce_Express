@@ -2,7 +2,7 @@
 const mongoose = require('mongoose'); // Erase if already required
 
 const DOCUMENT_NAME = 'Shop';
-const COLLECTION_NAME = 'Shops';
+const COLLECTION_NAME = 'shops';
 
 // Declare the Schema of the Mongo model
 var shopSchema = new mongoose.Schema({
@@ -30,9 +30,9 @@ var shopSchema = new mongoose.Schema({
         default: false
     },
     role: {
-        type: Array,
-        default: []
-    }},
+        type: mongoose.Schema.Types.ObjectId, ref: 'Role'
+    }
+},
     {
         timestamps: true,
         collection: COLLECTION_NAME

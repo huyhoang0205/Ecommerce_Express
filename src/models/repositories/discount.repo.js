@@ -10,8 +10,8 @@ const {
 
 //create
 const createNewDiscount = async ({
-    name,description,type,value,code,start_date,end_date,max_uses,
-    use_count,user_used,max_use_per_user,min_order_value,shop_id,
+    name,description,type,value,code,start_date,end_date,max_uses
+    ,user_used,max_use_per_user,min_order_value,shop_id,
     is_active,apply_to,product_ids,max_value
 }) => {
     return await discount.create({
@@ -23,7 +23,6 @@ const createNewDiscount = async ({
             discount_start_date: new Date(start_date),
             discount_end_date: new Date(end_date),
             discount_max_uses: max_uses,// Maximum number of discount codes that can be used
-            discount_use_count: use_count,// number of discount codes used
             discount_user_used: user_used,
             discount_max_use_per_user: max_use_per_user, //Maximum number of discount codes allowed per user
             discount_min_order_value: min_order_value || 0,//minimum order price allowed by discount code
@@ -87,7 +86,7 @@ const updateDiscount = async ({discount_id , user_id, } ) => {
             },
             $inc: {
                 discount_max_uses: 1,
-                discount_uses_count: -1,
+                discount_use_count: -1,
             }
         }
     )

@@ -3,7 +3,7 @@
 const HEADER = {
     API_KEY: 'x-api-key',
     CLIENT_ID: 'x-client-id',
-    AUTHORIZATION : 'authorization',
+    AUTHORIZATION : 'x-access-token',
     REFRESH_TOKEN : 'x-rtoken-id'
 }
 
@@ -20,6 +20,7 @@ const KeyTokenService = require('../services/keyToken.service')
 const createKeyPair = async ( payload , publicKey , privateKey ) => {
     try {
         //accessToken 
+        const {userId, email} = payload
         const accessToken = await JWT.sign(payload , publicKey , {
             expiresIn: '2 days',
         })
@@ -39,43 +40,13 @@ const createKeyPair = async ( payload , publicKey , privateKey ) => {
         return {accessToken , refreshToken}
     }
     catch (error) {
-
+        console.log('create Token fail::::',error)
     }
 }
 
-const authentication = asyncHandler( async (req , res , next) => {
-    
-    const userId = req.headers[HEADER.CLIENT_ID];
-    if(!userId) {
-        throw new AuthFailureError("Invalid Request! Missing userId in header!")
-    }
-
-    const keyStore = await KeyTokenService.findByUserId(userId);
-    if(!keyStore) {
-        throw new NotFoundError("Not found keyStore!")
-    }
-
-    const accessToken = req.headers[HEADER.AUTHORIZATION];
-    if(!accessToken) {
-        throw new AuthFailureError("Invalid Request! Missing accessToken in header!")
-    }
-
-    try {
-        const decodeUser = JWT.verify(accessToken , keyStore.publicKey);
-        if(decodeUser.userId !== userId) {
-            throw new AuthFailureError("Invalid User !")
-        }
-
-        req.keyStore = keyStore; // save keyStore to req for use in logout and other function in services
-
-        return next();
-    } catch (error) {
-        throw error
-    }
-})
 
 const authenticationV2 = asyncHandler( async (req , res , next) => {
-    
+    console.log("header::::::",req.headers)
     const userId = req.headers[HEADER.CLIENT_ID];
     if(!userId) {
         throw new AuthFailureError("Invalid Request! Missing userId in header!")
@@ -88,7 +59,6 @@ const authenticationV2 = asyncHandler( async (req , res , next) => {
 
     if(req.headers[HEADER.REFRESH_TOKEN]) {
         try {
-
             const refreshToken = req.headers[HEADER.REFRESH_TOKEN];
             const decodeUser = JWT.verify(refreshToken , keyStore.privateKey);
             if(decodeUser.userId !== userId) {
@@ -108,6 +78,7 @@ const authenticationV2 = asyncHandler( async (req , res , next) => {
     }
 
     const accessToken = req.headers[HEADER.AUTHORIZATION];
+    console.log("accesstoken:::::", accessToken)
     if(!accessToken) {
         throw new AuthFailureError("Invalid Request! Missing accessToken in header!")
     }
@@ -117,7 +88,6 @@ const authenticationV2 = asyncHandler( async (req , res , next) => {
         if(decodeUser.userId !== userId) {
             throw new AuthFailureError("Invalid User !")
         }
-
         req.keyStore = keyStore; // save keyStore to req for use in logout and other function in services
         req.user = decodeUser
 
