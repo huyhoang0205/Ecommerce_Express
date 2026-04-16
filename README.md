@@ -1,4 +1,4 @@
-# 🚀 NexaShop - E-commerce Backend API
+# 🚀 E-commerce Backend API
 Một hệ thống quản lý cửa hàng (E-commerce) được xây dựng bằng Node.js, Express và MongoDB.  
 
 # ✨ Tính năng nổi bật
