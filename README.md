@@ -143,4 +143,4 @@ URL: ```http://${host}$:${port}/api-docs```
 
 # 📝 License
 
-Contact: Nguyễn Văn A - [email@example.com]
+Contact: Nguyễn Đình Huy Hoàng - [ndhhoang.02052002@gmail.com]
