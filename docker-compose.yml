@@ -1,0 +1,40 @@
+name: e-commerce-app
+
+services:
+  app:
+    image: huyhoang25/my-e-commerce-api:v1
+    container_name: e-commerce_app
+    ports:
+      - "3000:3000" #"3000:DEV_APP_PORT"
+    environment:
+      - NODE_ENV=dev
+      - DEV_DB_NAME=shopDEV
+      - DEV_DB_HOST=mongodb
+      - DEV_DB_PORT=27017
+      - DEV_APP_PORT=3000
+      #- EMAIL_USER=
+      #- EMAIL_PASS=
+      - REDIS_HOST=redis-server
+      - REDIS_PORT=6379
+    depends_on:
+      - mongodb
+      - redis-server
+  mongodb:
+    # restart: always
+    image: mongo:latest
+    container_name: mongodb-express
+    volumes:
+      - mongo_data:/data/db
+    ports:
+      - 27017:27017
+  # Redis Server
+  redis-server:
+    # restart: always
+    image: redis:8.0
+    container_name: redis-server
+    hostname: redis-server
+    ports:
+      - "6379:6379"
+
+volumes:
+  mongo_data:

@@ -74,7 +74,12 @@ cd Ecommerce_Express
 ```
 
 ## 2. Cấu hình môi trường
-Tạo file .env tại thư mục gốc và copy nội dung từ .env.example:
+Khởi tạo các tool bằng docker như sau:
+```
+docker compose -f docker/docker-compose up -d
+```
+
+Hoặc chạy các tool trực tiếp trên máy(server) và tạo file .env tại thư mục gốc và copy nội dung từ .env.example:
 
 ```
 NODE_ENV=dev
@@ -110,11 +115,24 @@ Dự án đã được cấu hình Docker Compose để bạn có thể khởi c
 * Đã cài đặt [Docker Desktop](https://www.docker.com/products/docker-desktop/)
 
 ### Các bước thực hiện:
-1. Tạo file `.env` (như hướng dẫn ở trên).
+1. chỉnh sửa các biến môi trường trong file docker-compose
+
+```
+environment:
+      - NODE_ENV=dev
+      - DEV_DB_NAME=shopDEV
+      - DEV_DB_HOST=mongodb
+      - DEV_DB_PORT=27017
+      - DEV_APP_PORT=3000
+      - EMAIL_USER=${your_edit}
+      - EMAIL_PASS=${your_edit}
+      - REDIS_HOST=redis-server
+      - REDIS_PORT=6379
+```
 2. Chạy lệnh sau tại thư mục gốc:
 
    ```bash
-   docker-compose up --build
+   docker-compose up -d
    ```
 # 📂 Cấu trúc thư mục
 

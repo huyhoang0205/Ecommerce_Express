@@ -12,7 +12,7 @@ services:
   # Redis Server
   redis-server:
     # restart: always
-    image: redis:7.2.4
+    image: redis:8.0
     container_name: redis-server
     hostname: redis-server
     ports:
