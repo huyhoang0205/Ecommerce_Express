@@ -3,6 +3,7 @@ const {app:{port}} = require('./src/configs')
 const {connectRedis} = require('./src/dbs/init.redis')
 const {seedingResources} = require('./src/dbs/resourece.seeding.mongodb')
 const {seedingRoles} = require('./src/dbs/role.seeding.mongodb')
+const {seedingTemplate} = require('./src/dbs/template.seeding.mongodb')
 const PORT =  port;
 
 const startServer = async () => {
@@ -10,6 +11,7 @@ const startServer = async () => {
     require('./src/dbs/init.mongodb');
     await seedingResources();
     await seedingRoles();
+    await seedingTemplate();
     const server = app.listen(PORT , () => {
         console.log(`Express eCommerce start with ${PORT}`)
     })

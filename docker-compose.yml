@@ -12,8 +12,8 @@ services:
       - DEV_DB_HOST=mongodb
       - DEV_DB_PORT=27017
       - DEV_APP_PORT=3000
-      #- EMAIL_USER=
-      #- EMAIL_PASS=
+      - EMAIL_USER=nguyendinhhuyhoang8a@gmail.com
+      - EMAIL_PASS=fzod aedf mcpx iimf
       - REDIS_HOST=redis-server
       - REDIS_PORT=6379
     depends_on:
