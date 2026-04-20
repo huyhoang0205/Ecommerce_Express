@@ -1,6 +1,10 @@
 # 🚀 E-commerce Backend API
 Một hệ thống quản lý cửa hàng (E-commerce) được xây dựng bằng Node.js, Express và MongoDB.  
 
+# 🎬 Demo
+
+https://github.com/user-attachments/assets/92dee6b7-e7fe-4c2e-add3-dbf8710971c8
+
 # ✨ Tính năng nổi bật
 **Access Service**
 - SignUp
