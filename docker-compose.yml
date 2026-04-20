@@ -2,7 +2,7 @@ name: e-commerce-app
 
 services:
   app:
-    image: huyhoang25/my-e-commerce-api:v1
+    image: huyhoang25/my-e-commerce-api:v2
     container_name: e-commerce_app
     ports:
       - "3000:3000" #"3000:DEV_APP_PORT"
